@@ -1,0 +1,72 @@
+
+Step 1
+after the initial set up the first thing we did was create the ability to make
+a new username and password. it was originally placed in lines 34-64.
+The problem with it is that it in the data base everything is read as plain
+text so if it were ever hacked the person could see everyone's username and pw.
+
+here is the code it took to make it happen
+
+when the person clicks on register it takes them here to make a new user and pw
+
+app.post("/register", function(req, res){
+  const newUser = new User({
+    email: req.body.username,
+    password: req.body.password
+  });
+
+this is what saves the user and pw to db via mongoose
+
+  newUser.save(function(err){
+    if(err){
+      console.log(err);
+    } else{
+      res.render("secrets");
+    }
+  });
+});
+
+
+this is the function that serves as a door to let people in or keeps them out
+based on if their user and pw match
+
+app.post("/login", function(req, res){
+  const username = req.body.username;
+  const password = req.body.password;
+
+  User.findOne({email: username}, function(err, foundUser){
+    if (err){
+      console.log(err);
+    }else{
+      if (foundUser) {
+        if (foundUser.password=== password){
+          res.render("secrets");
+        }
+      }
+    }
+  });
+});
+
+Step 2
+we downloaded mongoose-encryption and required it at the top
+
+we changed:
+const newUser = new User({
+  email: req.body.username,
+  password: req.body.password
+});
+
+to
+const userSchema = new mongoose.Schema ({
+  email: String,
+  password: String
+});
+
+and added
+
+const secret = "thisisourlittlesecret.";
+userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
+
+it was important to add this before the const User because this allows things
+to be encrypted before they are added to the database. the encrypted fields
+allows it to just encrypt the just the password instead of everything
