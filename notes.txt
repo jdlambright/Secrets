@@ -70,3 +70,6 @@ userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
 it was important to add this before the const User because this allows things
 to be encrypted before they are added to the database. the encrypted fields
 allows it to just encrypt the just the password instead of everything
+
+this set it up to encrypt when we save (currently line 46the new user and pw
+and decrypt when we findOne(line 59)
