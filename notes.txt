@@ -1,5 +1,6 @@
 
-Step 1
+Step 1---------------------------------
+
 after the initial set up the first thing we did was create the ability to make
 a new username and password. it was originally placed in lines 34-64.
 The problem with it is that it in the data base everything is read as plain
@@ -47,7 +48,8 @@ app.post("/login", function(req, res){
   });
 });
 
-Step 2
+Step 2---------------------------------------------------
+
 we downloaded mongoose-encryption and required it at the top
 
 we changed:
@@ -67,9 +69,43 @@ and added
 const secret = "thisisourlittlesecret.";
 userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
 
+the const secret is the key for decryption
+
 it was important to add this before the const User because this allows things
 to be encrypted before they are added to the database. the encrypted fields
 allows it to just encrypt the just the password instead of everything
 
 this set it up to encrypt when we save (currently line 46the new user and pw
 and decrypt when we findOne(line 59)
+
+step 3------------------------------------------------
+
+this step is designed to protect your files once they go to github or other
+version control software. we downloaded the dotenv module in express because
+it creates what is called an environment variable. in hyper we created two files
+that were hidden. .env and .gitignore.  we also placed
+
+require('dotenv').config();
+
+in the top line. then we moved the const secret = "thisisourlittlesecret."; to
+the .env file and changed the coding to
+
+SECRET=thisisourlittlesecret.
+
+it was important to capitalize it and if its multiple words put a _ btwn
+them. also removed "" and ; so it knows how to read it properly.
+
+then we went back and changed
+
+userSchema.plugin(encrypt, {secret:secret, encryptedFields: ["password"]});
+to
+userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ["password"]});
+
+this told the code to find the key in the .env file
+
+the purpose of the .gitignore is to keep the .env file hidden. we google
+searched git gitignore to find the repository that contained the content to
+put in this file. we cliked on node copy and pasted it to ours.
+
+it is important to do this on the first commit so people dont go back and find
+the keys in previous versions
