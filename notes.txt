@@ -109,3 +109,16 @@ put in this file. we cliked on node copy and pasted it to ours.
 
 it is important to do this on the first commit so people dont go back and find
 the keys in previous versions
+
+step 4---------------------------------------
+
+we changed everything from an encrypted system to a hashed system
+we removed the const = require(mongoose-encryption) and installed a new
+package md5 and made that a const md5 = require("md5");
+
+we removed the plug in
+
+userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ["password"]});
+
+we went to the post request for register and login and added md5 so we can
+have our website compare hashes
