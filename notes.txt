@@ -122,3 +122,39 @@ userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ["passw
 
 we went to the post request for register and login and added md5 so we can
 have our website compare hashes
+
+step 5----------------------------------------
+
+bcrypt adds salting so it is more secure. we removed md5 and added bcrypt
+then created a new const saltRounds =10;
+
+we changed the register route to this
+
+app.post("/register", function(req, res){
+
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+    const newUser = new User({
+      email: req.body.username,
+      password: hash
+    });
+
+and the login route to this
+
+app.post("/login", function(req, res){
+  const username = req.body.username;
+  const password = req.body.password;
+
+  User.findOne({email: username}, function(err, foundUser){
+    if (err){
+      console.log(err);
+    }else{
+      if (foundUser) {
+        bcrypt.compare(password, foundUser.password, function(err, result) {
+          if (result === true){
+            res.render("secrets");
+          }
+        });
+      }
+    }
+  });
+});
