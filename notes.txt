@@ -176,4 +176,75 @@ make sense
 we also added a logout route as well she recommended reading the documentation
 and rewatching the video
 
-step 7
+step 7---------------- open authorization
+
+you download a new game and it says would you like to find your friends
+from facebook that already have this
+
+the key is it allows me to go through my app and log in to facebook so it
+relieves my game and facebook of extra liability.
+
+it allows granular access(here is your list of friends)
+read/read+write access
+revoke access( i can sign into facebook and cancel access to my game)
+
+1) we have to set our app up so facebook knows we exist. we are the client
+2) we give option to redirect user to login into facebook
+3) user actually logs in
+4) user grants permissions
+5) after that we receive an authorization code from facebook
+6) then we get an authentication token which allows us to actually get access
+to info from facebook
+
+adding login with google to our website
+
+from the passport documentation we got a link to the google developer console
+we followed the steps to create google api. it looked different than the video
+
+it is important to paste the code from passport after all the set up and right
+before the routes
+
+we changed the prepopulated code from documentation to
+
+line 46 clientID: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/auth/google/secrets"
+
+because of different deprecation errors we went to google and found a repository
+that fixed it and a guy said to add useProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+ as another line to the javascript object
+
+ we had to add mongoose-findorcreate as another package to make that line 53
+ work properly. we had to create a const at the top and require it. then we
+ added the plugin to our userSchema
+
+ we had to create new get request of our /auth/google and /auth/google/secrets
+ routes so when you click on the button sign in with google it actually does
+ something
+
+
+ section 8------------------------ uploading new POST
+ made new route created get and post route added secret to Schema
+
+ updated secrets route changed to
+
+ User.find({"secret":{$ne: null}}, )
+
+ to make it look for everything that was not null in the users field and this
+ saves all posts
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+___________the end-------------
