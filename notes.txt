@@ -1,5 +1,5 @@
 
-Step 1---------------------------------
+Step 1----------------------------- creating username password basic
 
 after the initial set up the first thing we did was create the ability to make
 a new username and password. it was originally placed in lines 34-64.
@@ -48,7 +48,7 @@ app.post("/login", function(req, res){
   });
 });
 
-Step 2---------------------------------------------------
+Step 2------------------------------------- encrypting database
 
 we downloaded mongoose-encryption and required it at the top
 
@@ -78,7 +78,7 @@ allows it to just encrypt the just the password instead of everything
 this set it up to encrypt when we save (currently line 46the new user and pw
 and decrypt when we findOne(line 59)
 
-step 3------------------------------------------------
+step 3-----------------------------------------version control safety
 
 this step is designed to protect your files once they go to github or other
 version control software. we downloaded the dotenv module in express because
@@ -110,7 +110,7 @@ put in this file. we cliked on node copy and pasted it to ours.
 it is important to do this on the first commit so people dont go back and find
 the keys in previous versions
 
-step 4---------------------------------------
+step 4--------------------------------------- add hashing
 
 we changed everything from an encrypted system to a hashed system
 we removed the const = require(mongoose-encryption) and installed a new
@@ -123,7 +123,7 @@ userSchema.plugin(encrypt, {secret: process.env.SECRET, encryptedFields: ["passw
 we went to the post request for register and login and added md5 so we can
 have our website compare hashes
 
-step 5----------------------------------------
+step 5---------------------------------------- adding salting
 
 bcrypt adds salting so it is more secure. we removed md5 and added bcrypt
 then created a new const saltRounds =10;
@@ -158,3 +158,22 @@ app.post("/login", function(req, res){
     }
   });
 });
+
+step 6-------------------------------------- creating sessions
+we removed bcrypt added passport passport local passport local mongoose and
+express session (singular not ploral).
+
+we configured passport and session after body parser and before Mongoose.
+this is to creat sessions
+we will eventually move session to .env to keep secret
+
+passportLocalMongoose is a plugin we add after our user schema  to serialize
+and deserialize the users. it was crucial to add it at line 34
+
+passport allows there to be sessions. read back over the code and it should
+make sense
+
+we also added a logout route as well she recommended reading the documentation
+and rewatching the video
+
+step 7
